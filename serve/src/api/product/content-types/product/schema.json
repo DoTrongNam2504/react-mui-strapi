@@ -35,9 +35,6 @@
     "stock": {
       "type": "biginteger"
     },
-    "tag": {
-      "type": "text"
-    },
     "price": {
       "type": "biginteger"
     },
@@ -58,8 +55,7 @@
     "category_id": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::category.category",
-      "private": true
+      "target": "api::category.category"
     }
   }
 }

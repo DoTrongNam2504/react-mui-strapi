@@ -20,6 +20,7 @@ const columns = [
     flex: 0.5,
     editable: true,
     renderCell: (params) => {
+      const imageUrl = params.row.attributes.image.data.attributes?.url;
       return (
         <Box
           component="img"
@@ -29,8 +30,8 @@ const columns = [
             maxHeight: { xs: 70, md: 50 },
             maxWidth: { xs: 70, md: 50 },
           }}
-          alt="The house from the offer."
-          src={params.value}
+          alt="Product image !"
+          src={`http://localhost:1337${imageUrl}`}
         />
       );
     },
@@ -39,17 +40,8 @@ const columns = [
     field: "name",
     headerName: "Product Name",
     valueGetter: (params) => {
-      const leads = params.row.attributes?.leads;
-      if (
-        typeof leads === "object" &&
-        leads !== null &&
-        leads.hasOwnProperty("leadSourceName")
-      ) {
-        console.log("LEADS OBJECT:", leads); // add this line to log the value of the leads object
-        return leads.leadSourceName;
-      } else {
-        return "No leads";
-      }
+      const name = params.row.attributes?.name;
+      return name !== "" ? name : "No name";
     },
     flex: 1,
     editable: true,
@@ -57,6 +49,10 @@ const columns = [
   {
     field: "category",
     headerName: "Category",
+    valueGetter: (params) => {
+      const name = params.row.attributes.category_id.data.attributes?.name;
+      return name !== "" ? name : "No name";
+    },
     flex: 0.5,
     editable: true,
   },
@@ -65,20 +61,24 @@ const columns = [
     field: "stock",
     headerName: "Stock",
     type: "number",
+    valueGetter: (params) => {
+      const stock = params.row.attributes?.stock;
+      return stock !== "" ? stock : "0";
+    },
     flex: 0.5,
     editable: true,
   },
   {
-    field: "price",
-    headerName: "Price",
-    type: "number",
-    flex: 0.5,
-  },
-  {
     field: "publish",
     headerName: "Publish",
-    type: "boolean",
-    flex: 1,
+    valueGetter: (params) => {
+      const status = params.row.attributes?.publish;
+      if (status) {
+        return "Published";
+      }
+      return "Draft";
+    },
+    flex: 0.5,
     editable: true,
   },
   {
@@ -91,7 +91,7 @@ const columns = [
 ];
 
 const Product = () => {
-  const  products  = useSelector((state) => state.product.products);
+  const products = useSelector((state) => state.product.products);
   const loading = useSelector((state) => state.product.loading);
   // const productList = Object.keys(products.data).map((key) => [key, products.data[key]]);
   // console.log( productList )
@@ -102,8 +102,8 @@ const Product = () => {
 
   const navigate = useNavigate();
 
-  {if (loading) 
-    return <h2>Loading</h2>;
+  {
+    if (loading) return <h2>Loading</h2>;
   }
   return (
     <Box p={3}>
@@ -119,8 +119,9 @@ const Product = () => {
           </Button>
         </FlexBetween>
         <Box sx={{ width: "100%" }} mt={5}>
-          {products && products.length !== 0 &&
+          {products && products.length !== 0 && (
             <DataGrid
+              autoHeight={true}
               rowHeight={80}
               rows={products.data}
               columns={columns}
@@ -135,7 +136,7 @@ const Product = () => {
               checkboxSelection
               disableRowSelectionOnClick
             ></DataGrid>
-          }
+          )}
         </Box>
       </Container>
     </Box>
