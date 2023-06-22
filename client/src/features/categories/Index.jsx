@@ -91,7 +91,7 @@ const Category = () => {
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => navigate("/product/add")}
+            onClick={() => navigate("/category/add")}
           >
             Add New
           </Button>

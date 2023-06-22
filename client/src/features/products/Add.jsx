@@ -23,9 +23,11 @@ import Container from "@mui/material/Container"; // or
 import Paper from "@mui/material/Paper";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useState } from "react";
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from "react-router-dom";
 const AddProduct = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const ReactQuillContainer = styled("div")(() => ({
     "& .ql-container.ql-snow": {
@@ -88,6 +90,13 @@ const AddProduct = () => {
       <Container>
         <FlexBetween>
           <HeaderBread page="Product" action="Create" />
+          <Button
+            variant="contained"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate("/products")}
+          >
+            Back To Home
+          </Button>
         </FlexBetween>
         <FormControl style={{ width: "100%", height: "100%" }}>
           <Grid container spacing={2} sx={{ width: "100%" }} mt={5}>
